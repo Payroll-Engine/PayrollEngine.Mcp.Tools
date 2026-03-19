@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PayrollEngine.Mcp.Tools</name>
+    </assembly>
+    <members>
+        <member name="T:PayrollEngine.Mcp.Tools.PayrollTools.ConsolidatedResultTools">
+            <summary>MCP tools for consolidated payroll result queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.ConsolidatedResultTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for consolidated payroll result queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.ConsolidatedResultTools.GetConsolidatedPayrollResultAsync(System.String,System.String,System.String,System.String,System.String)">
+            <summary>Get the consolidated payroll result for an employee and period</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.PayrollTools.PayrollPreviewTools">
+            <summary>MCP tools for payrun preview calculations</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollPreviewTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for payrun preview calculations</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollPreviewTools.GetEmployeePayPreviewAsync(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>Preview the payroll calculation for a single employee without persisting results</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.PayrollTools.PayrollQueryTools">
+            <summary>MCP tools for payroll, payrun and job queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollQueryTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for payroll, payrun and job queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollQueryTools.ListPayrollsAsync(System.String)">
+            <summary>List all payrolls of a tenant</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollQueryTools.GetPayrollAsync(System.String,System.String)">
+            <summary>Get a payroll by name within a tenant</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollQueryTools.ListPayrunsAsync(System.String)">
+            <summary>List all payruns of a tenant</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollQueryTools.ListPayrunJobsAsync(System.String)">
+            <summary>List all payrun jobs of a tenant, ordered by creation date descending</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollQueryTools.ListPayrollWageTypesAsync(System.String,System.String)">
+            <summary>List all effective wage types of a payroll merged across all regulation layers</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollQueryTools.GetPayrollLookupValueAsync(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>Get a single lookup value from a payroll lookup by key</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollQueryTools.GetCaseTimeValuesAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>Get case values at a specific point in time</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.PayrollTools.PayrollResultTools">
+            <summary>MCP tools for payroll result value queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollResultTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for payroll result value queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollResultTools.ListPayrollResultValuesAsync(System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>List payroll result values for a tenant</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.PeopleTools.CaseChangeQueryTools">
+            <summary>MCP tools for case change queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.CaseChangeQueryTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for case change queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.CaseChangeQueryTools.ListEmployeeCaseChangesAsync(System.String,System.String,System.String,System.Int32)">
+            <summary>List all case changes of an employee within a tenant</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.CaseChangeQueryTools.ListCompanyCaseChangesAsync(System.String,System.String,System.Int32)">
+            <summary>List all company case changes within a tenant</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.PeopleTools.CaseValueQueryTools">
+            <summary>MCP tools for case value queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.CaseValueQueryTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for case value queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.CaseValueQueryTools.ListEmployeeCaseValuesAsync(System.String,System.String)">
+            <summary>List all employee case values within a tenant</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.CaseValueQueryTools.ListCompanyCaseValuesAsync(System.String)">
+            <summary>List all company case values of a tenant</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.PeopleTools.DivisionQueryTools">
+            <summary>MCP tools for division queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.DivisionQueryTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for division queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.DivisionQueryTools.ListDivisionsAsync(System.String)">
+            <summary>List all divisions of a tenant</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.DivisionQueryTools.GetDivisionAsync(System.String,System.String)">
+            <summary>Get a division by name within a tenant</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.DivisionQueryTools.GetDivisionAttributeAsync(System.String,System.String,System.String)">
+            <summary>Get a single attribute value of a division</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.PeopleTools.EmployeeQueryTools">
+            <summary>MCP tools for employee queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.EmployeeQueryTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for employee queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.EmployeeQueryTools.ListEmployeesAsync(System.String,System.String,System.Int32)">
+            <summary>List employees of a tenant</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.EmployeeQueryTools.GetEmployeeAsync(System.String,System.String)">
+            <summary>Get an employee by identifier within a tenant</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.EmployeeQueryTools.GetEmployeeAttributeAsync(System.String,System.String,System.String)">
+            <summary>Get a single attribute value of an employee</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.PeopleTools.UserQueryTools">
+            <summary>MCP tools for user queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.UserQueryTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for user queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.UserQueryTools.ListUsersAsync(System.String)">
+            <summary>List all users of a tenant</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.UserQueryTools.GetUserAsync(System.String,System.String)">
+            <summary>Get a user by identifier within a tenant</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.UserQueryTools.GetUserAttributeAsync(System.String,System.String,System.String)">
+            <summary>Get a single attribute value of a user</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.ReportTools.ReportQueryTools">
+            <summary>MCP tools for payroll report execution</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.ReportTools.ReportQueryTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for payroll report execution</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.ReportTools.ReportQueryTools.ExecutePayrollReportAsync(System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
+            <summary>Execute a payroll report and return the result data set</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.ServerInfoTools">
+            <summary>MCP tool for server metadata — always registered regardless of role or isolation level.</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.ServerInfoTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tool for server metadata — always registered regardless of role or isolation level.</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.ServerInfoTools.GetServerInfoAsync">
+            <summary>Get MCP server version, isolation level and active permissions</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.TenantTools.TenantQueryTools">
+            <summary>MCP tools for tenant queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.TenantTools.TenantQueryTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for tenant queries</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.TenantTools.TenantQueryTools.ListTenantsAsync">
+            <summary>List all tenants</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.TenantTools.TenantQueryTools.GetTenantAsync(System.String)">
+            <summary>Get a tenant by identifier</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.TenantTools.TenantQueryTools.GetTenantAttributeAsync(System.String,System.String)">
+            <summary>Get a single tenant attribute by name</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.ToolsMarker">
+            <summary>Assembly marker for MCP tool discovery</summary>
+        </member>
+    </members>
+</doc>
