@@ -32,13 +32,6 @@
 		</None>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Include="..\README.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	</ItemGroup>
-
 	<!-- publish package -->
 	<Target Name="PublishPackage" AfterTargets="Pack" Condition="exists('$(PayrollEnginePackageDir)')">
 		<Message Importance="High" Text="Publish package..." />
