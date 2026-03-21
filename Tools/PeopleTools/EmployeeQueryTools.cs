@@ -31,9 +31,7 @@ public sealed class EmployeeQueryTools(PayrollHttpClient httpClient, IsolationCo
             var context = await ResolveTenantContextAsync(tenantIdentifier);
             var query = IsolatedEmployeeQuery(filter, top > 0 ? top : null);
             var employees = await EmployeeService().QueryAsync<Employee>(context, query);
-            // Client-side division filter (backend does not support divisions/any() OData lambda)
-            var filtered = FilterEmployeesByIsolation(employees);
-            return JsonSerializer.Serialize(filtered);
+            return JsonSerializer.Serialize(employees);
         }
         catch (Exception ex) { return Error(ex); }
     }
