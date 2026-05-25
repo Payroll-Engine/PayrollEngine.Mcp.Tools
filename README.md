@@ -51,6 +51,7 @@ Employee master data, case values, and audit trail.
 | `list_company_case_values` | Company-level case values of a tenant |
 | `list_employee_case_changes` | Audit trail of employee data mutations |
 | `list_company_case_changes` | Audit trail of company data mutations |
+| `get_available_cases` | Available cases for data entry within a payroll (script-evaluated per user) |
 
 ### Payroll — Payroll Processing
 

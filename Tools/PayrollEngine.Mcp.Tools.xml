@@ -4,6 +4,18 @@
         <name>PayrollEngine.Mcp.Tools</name>
     </assembly>
     <members>
+        <member name="T:PayrollEngine.Mcp.Tools.PayrollTools.CaseSchemaQueryTools">
+            <summary>MCP tools for case schema discovery — available cases and case build definitions</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.CaseSchemaQueryTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for case schema discovery — available cases and case build definitions</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.CaseSchemaQueryTools.GetAvailableCasesAsync(System.String,System.String,System.String,System.String,System.String)">
+            <summary>List all cases available for data entry within a payroll</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.CaseSchemaQueryTools.ResolveEffectiveUserIdentifier(System.String)">
+            <summary>Resolves the effective user identifier: explicit parameter, then PreviewUserIdentifier fallback.</summary>
+        </member>
         <member name="T:PayrollEngine.Mcp.Tools.PayrollTools.ConsolidatedResultTools">
             <summary>MCP tools for consolidated payroll result queries</summary>
         </member>
