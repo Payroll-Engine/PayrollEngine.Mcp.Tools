@@ -63,6 +63,7 @@ Payroll structure, results, preview calculations, temporal case value queries, a
 | `get_payroll` | Get a payroll by name |
 | `list_payruns` | List all payruns of a tenant |
 | `list_payrun_jobs` | List all payrun jobs ordered by creation date descending |
+| `get_payrun_statistics` | Payrun counts and employee totals for legal and forecast jobs within a date range |
 | `list_payroll_wage_types` | Effective wage types merged across all regulation layers |
 | `get_payroll_lookup_value` | Resolved lookup value by key or range value |
 | `list_payroll_result_values` | Flat denormalized list of all result values |

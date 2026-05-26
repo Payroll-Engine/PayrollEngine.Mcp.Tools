@@ -52,6 +52,9 @@
         <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollQueryTools.ListPayrunJobsAsync(System.String)">
             <summary>List all payrun jobs of a tenant, ordered by creation date descending</summary>
         </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollQueryTools.GetPayrunStatisticsAsync(System.String,System.String,System.String,System.String)">
+            <summary>Get payrun statistics for a tenant within a date range</summary>
+        </member>
         <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollQueryTools.ListPayrollWageTypesAsync(System.String,System.String)">
             <summary>List all effective wage types of a payroll merged across all regulation layers</summary>
         </member>

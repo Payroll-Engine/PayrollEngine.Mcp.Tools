@@ -6,8 +6,10 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ModelContextProtocol.Server;
+using PayrollEngine;
 using PayrollEngine.Client;
 using PayrollEngine.Client.Model;
+using PayrollEngine.Client.QueryExpression;
 using PayrollEngine.Mcp.Core;
 using PayrollEngine.Mcp.Core.Isolation;
 
@@ -101,6 +103,100 @@ public sealed class PayrollQueryTools(PayrollHttpClient httpClient, IsolationCon
             {
                 divisions = divisionNames,
                 payrunJobs = jobs
+            };
+            return JsonSerializer.Serialize(result);
+        }
+        catch (Exception ex) { return Error(ex); }
+    }
+
+    /// <summary>Get payrun statistics for a tenant within a date range</summary>
+    [McpServerTool(Name = "get_payrun_statistics"), Description(
+        "Get payrun statistics for a tenant within a date range. " +
+        "Returns the count of completed legal payrun jobs (status Complete) and forecast payrun jobs (status Forecast), " +
+        "together with the total number of employees processed by each type. " +
+        "Use this to report payroll traffic and usage across a billing or review period.")]
+    public async Task<string> GetPayrunStatisticsAsync(
+        [Description("The unique tenant identifier")] string tenantIdentifier,
+        [Description("Statistics start date (ISO 8601), e.g. '2026-01-01' — matches jobs whose period starts on or after this date")] string periodStart,
+        [Description("Statistics end date (ISO 8601, inclusive), e.g. '2026-12-31' — matches jobs whose period starts on or before this date")] string periodEnd,
+        [Description("Optional division name to restrict statistics to a specific division")] string divisionName = null)
+    {
+        try
+        {
+            if (!DateTime.TryParse(periodStart, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedStart))
+            {
+                return JsonSerializer.Serialize(new
+                {
+                    error = $"Invalid periodStart '{periodStart}'. Use ISO 8601 format, e.g. '2026-01-01'.",
+                    type = nameof(FormatException)
+                });
+            }
+            if (!DateTime.TryParse(periodEnd, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedEnd))
+            {
+                return JsonSerializer.Serialize(new
+                {
+                    error = $"Invalid periodEnd '{periodEnd}'. Use ISO 8601 format, e.g. '2026-12-31'.",
+                    type = nameof(FormatException)
+                });
+            }
+            // treat a date-only end value as end-of-day so the full last day is included
+            if (parsedEnd.TimeOfDay == TimeSpan.Zero)
+            {
+                parsedEnd = parsedEnd.Date.AddDays(1).AddTicks(-1);
+            }
+
+            if (parsedEnd < parsedStart)
+            {
+                return JsonSerializer.Serialize(new
+                {
+                    error = "periodEnd must be equal to or after periodStart.",
+                    type = nameof(ArgumentException)
+                });
+            }
+
+            var context = await ResolveTenantContextAsync(tenantIdentifier);
+
+            // build base query with isolation + period filter
+            var baseQuery = await IsolatedPayrunQueryAsync(tenantIdentifier);
+            var periodFilter = $"periodStart ge {parsedStart:yyyy-MM-ddTHH:mm:ss} and periodStart le {parsedEnd:yyyy-MM-ddTHH:mm:ss}";
+            baseQuery.Filter = string.IsNullOrWhiteSpace(baseQuery.Filter)
+                ? periodFilter
+                : new Filter(baseQuery.Filter).And(new Filter(periodFilter)).Expression;
+
+            // add explicit division filter when provided and not already constrained by Division isolation
+            if (!string.IsNullOrWhiteSpace(divisionName) && Isolation.Level != IsolationLevel.Division)
+            {
+                var division = await DivisionService().GetAsync<Division>(context, divisionName);
+                if (division == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Division '{divisionName}' not found in tenant '{tenantIdentifier}'.");
+                }
+                baseQuery.Filter = new Filter(baseQuery.Filter).And(new Filter($"divisionId eq {division.Id}")).Expression;
+            }
+
+            var jobs = await PayrunJobService().QueryAsync<PayrunJob>(context, baseQuery);
+
+            var legalJobs = jobs.Where(j => j.JobStatus == PayrunJobStatus.Complete).ToList();
+            var forecastJobs = jobs.Where(j => j.JobStatus == PayrunJobStatus.Forecast).ToList();
+
+            var result = new
+            {
+                period = new
+                {
+                    start = parsedStart.ToString("yyyy-MM-dd"),
+                    end = parsedEnd.ToString("yyyy-MM-dd")
+                },
+                legal = new
+                {
+                    payrunCount = legalJobs.Count,
+                    employeeCount = legalJobs.Sum(j => j.TotalEmployeeCount)
+                },
+                forecast = new
+                {
+                    payrunCount = forecastJobs.Count,
+                    employeeCount = forecastJobs.Sum(j => j.TotalEmployeeCount)
+                }
             };
             return JsonSerializer.Serialize(result);
         }
