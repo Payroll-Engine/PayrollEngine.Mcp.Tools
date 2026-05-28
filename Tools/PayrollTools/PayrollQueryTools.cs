@@ -180,8 +180,15 @@ public sealed class PayrollQueryTools(PayrollHttpClient httpClient, IsolationCon
             var legalJobs = jobs.Where(j => j.JobStatus == PayrunJobStatus.Complete).ToList();
             var forecastJobs = jobs.Where(j => j.JobStatus == PayrunJobStatus.Forecast).ToList();
 
+            var tenant = await ResolveTenantAsync(tenantIdentifier);
+            var effectiveDivision = !string.IsNullOrWhiteSpace(divisionName)
+                ? divisionName
+                : Isolation.Level == IsolationLevel.Division ? Isolation.DivisionName : null;
+
             var result = new
             {
+                tenantIdentifier = tenant.Identifier,
+                division = effectiveDivision,
                 period = new
                 {
                     start = parsedStart.ToString("yyyy-MM-dd"),
@@ -198,7 +205,7 @@ public sealed class PayrollQueryTools(PayrollHttpClient httpClient, IsolationCon
                     employeeCount = forecastJobs.Sum(j => j.TotalEmployeeCount)
                 }
             };
-            return JsonSerializer.Serialize(result);
+            return SignWithIntegrity(JsonSerializer.Serialize(result));
         }
         catch (Exception ex) { return Error(ex); }
     }
