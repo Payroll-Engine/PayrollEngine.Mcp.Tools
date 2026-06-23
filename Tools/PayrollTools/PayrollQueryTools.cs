@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ModelContextProtocol.Server;
-using PayrollEngine;
 using PayrollEngine.Client;
 using PayrollEngine.Client.Model;
 using PayrollEngine.Client.QueryExpression;
@@ -185,6 +184,9 @@ public sealed class PayrollQueryTools(PayrollHttpClient httpClient, IsolationCon
                 ? divisionName
                 : Isolation.Level == IsolationLevel.Division ? Isolation.DivisionName : null;
 
+            var backendInfo = await AdminService().GetBackendInformationAsync();
+            var db = backendInfo?.Database;
+
             var result = new
             {
                 tenantIdentifier = tenant.Identifier,
@@ -203,6 +205,13 @@ public sealed class PayrollQueryTools(PayrollHttpClient httpClient, IsolationCon
                 {
                     payrunCount = forecastJobs.Count,
                     employeeCount = forecastJobs.Sum(j => j.TotalEmployeeCount)
+                },
+                database = db == null ? null : new
+                {
+                    type = db.Type,
+                    name = db.Name,
+                    version = db.Version,
+                    edition = db.Edition
                 }
             };
             return SignWithIntegrity(JsonSerializer.Serialize(result));
