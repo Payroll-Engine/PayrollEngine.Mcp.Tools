@@ -25,6 +25,24 @@
         <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.ConsolidatedResultTools.GetConsolidatedPayrollResultAsync(System.String,System.String,System.String,System.String,System.String)">
             <summary>Get the consolidated payroll result for an employee and period</summary>
         </member>
+        <member name="T:PayrollEngine.Mcp.Tools.PayrollTools.LookupQueryTools">
+            <summary>MCP tools for lookup discovery, value retrieval, and historical comparison across regulation cycles</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.LookupQueryTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for lookup discovery, value retrieval, and historical comparison across regulation cycles</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.LookupQueryTools.QueryLookupsAsync(System.String,System.String,System.String,System.String)">
+            <summary>List all lookups of a payroll with metadata (description, attributes, range mode)</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.LookupQueryTools.GetLookupValuesAsync(System.String,System.String,System.String,System.String,System.String)">
+            <summary>Get all values of a specific lookup</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.LookupQueryTools.CompareLookupValuesAsync(System.String,System.String,System.String,System.String)">
+            <summary>Compare a lookup across all regulation cycles (validFrom dates)</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.LookupQueryTools.AssertPayrollDivisionAsync(System.String,System.String)">
+            <summary>Division isolation guard for payroll access</summary>
+        </member>
         <member name="T:PayrollEngine.Mcp.Tools.PayrollTools.PayrollPreviewTools">
             <summary>MCP tools for payrun preview calculations</summary>
         </member>
@@ -72,6 +90,21 @@
         </member>
         <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollResultTools.ListPayrollResultValuesAsync(System.String,System.String,System.String,System.String,System.Int32)">
             <summary>List payroll result values for a tenant</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.PayrollTools.PayrollStructureTools">
+            <summary>MCP tools for payroll regulation structure queries — cases, collectors, and their relationships</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollStructureTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>MCP tools for payroll regulation structure queries — cases, collectors, and their relationships</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollStructureTools.ListPayrollCasesAsync(System.String,System.String,System.String,System.String)">
+            <summary>List all cases of a payroll merged across regulation layers</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollStructureTools.ListPayrollCollectorsAsync(System.String,System.String,System.String,System.String)">
+            <summary>List all collectors of a payroll with their contributing wage types</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.PayrollTools.PayrollStructureTools.AssertPayrollDivisionAsync(System.String,System.String)">
+            <summary>Division isolation guard for payroll access</summary>
         </member>
         <member name="T:PayrollEngine.Mcp.Tools.PeopleTools.CaseChangeQueryTools">
             <summary>MCP tools for case change queries</summary>

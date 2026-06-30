@@ -55,7 +55,7 @@ Employee master data, case values, and audit trail.
 
 ### Payroll — Payroll Processing
 
-Payroll structure, results, preview calculations, temporal case value queries, and lookup resolution.
+Payroll structure, regulation analysis, results, preview calculations, temporal case value queries, and lookup resolution.
 
 | Tool | Description |
 |:-----|:------------|
@@ -64,8 +64,13 @@ Payroll structure, results, preview calculations, temporal case value queries, a
 | `list_payruns` | List all payruns of a tenant |
 | `list_payrun_jobs` | List all payrun jobs ordered by creation date descending |
 | `get_payrun_statistics` | Payrun counts and employee totals for legal and forecast jobs within a date range |
+| `list_payroll_cases` | Cases merged across regulation layers, filterable by type and cluster |
 | `list_payroll_wage_types` | Effective wage types merged across all regulation layers |
+| `list_payroll_collectors` | Collectors with their contributing wage types (direct and via groups) |
 | `get_payroll_lookup_value` | Resolved lookup value by key or range value |
+| `query_lookups` | List all lookups with metadata, filterable by attribute prefix |
+| `get_lookup_values` | All values of a specific lookup, optionally at a historical regulation date |
+| `compare_lookup_values` | Compare a lookup across all regulation cycles (validFrom dates) |
 | `list_payroll_result_values` | Flat denormalized list of all result values |
 | `get_consolidated_payroll_result` | All results for one employee and one period |
 | `get_employee_pay_preview` | Preview payroll calculation without persisting results |
