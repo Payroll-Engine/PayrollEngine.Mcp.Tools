@@ -38,6 +38,12 @@ public sealed class DivisionQueryTools(PayrollHttpClient httpClient, IsolationCo
     {
         try
         {
+            // Division isolation: guard — only own division is accessible
+            if (Isolation.Level == IsolationLevel.Division &&
+                !string.Equals(divisionName, Isolation.DivisionName, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException($"Access denied: division '{divisionName}' is not in the scope of division '{Isolation.DivisionName}'.");
+            }
             // Employee isolation: guard — only own divisions are accessible
             if (Isolation.Level == IsolationLevel.Employee)
             {
@@ -62,6 +68,12 @@ public sealed class DivisionQueryTools(PayrollHttpClient httpClient, IsolationCo
     {
         try
         {
+            // Division isolation: guard — only own division is accessible
+            if (Isolation.Level == IsolationLevel.Division &&
+                !string.Equals(divisionName, Isolation.DivisionName, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException($"Access denied: division '{divisionName}' is not in the scope of division '{Isolation.DivisionName}'.");
+            }
             // Employee isolation: guard — only own divisions are accessible
             if (Isolation.Level == IsolationLevel.Employee)
             {

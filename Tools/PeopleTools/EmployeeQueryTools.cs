@@ -45,6 +45,7 @@ public sealed class EmployeeQueryTools(PayrollHttpClient httpClient, IsolationCo
         try
         {
             var (_, employee) = await ResolveEmployeeAsync(tenantIdentifier, employeeIdentifier);
+            AssertEmployeeInDivision(employee);
             return JsonSerializer.Serialize(employee);
         }
         catch (Exception ex) { return Error(ex); }
@@ -60,6 +61,7 @@ public sealed class EmployeeQueryTools(PayrollHttpClient httpClient, IsolationCo
         try
         {
             var (context, employee) = await ResolveEmployeeAsync(tenantIdentifier, employeeIdentifier);
+            AssertEmployeeInDivision(employee);
             return await EmployeeService().GetAttributeAsync(context, employee.Id, attributeName);
         }
         catch (Exception ex) { return Error(ex); }
