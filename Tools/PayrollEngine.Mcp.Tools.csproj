@@ -17,8 +17,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ModelContextProtocol" Version="2.2.0" />
-		<PackageReference Include="PayrollEngine.Client.Core" Version="$(Version)" />
 		<PackageReference Include="PayrollEngine.Mcp.Core" Version="$(Version)" />
 	</ItemGroup>
 
