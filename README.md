@@ -106,7 +106,9 @@ File based tools over the `lex.json` manifests of data regulations, built on [Pa
 | `lex_verify_source` | Rate every entry against its sources, `local` evidence or `live`; nothing is written |
 | `lex_validate` | Structural validation of manifests |
 
-The package references PayrollEngine.Lex with all assets, so the language files of the library (`LexVocabulary`) are copied to the output of the host project without an own reference. Third-party components of Lex are listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+The tools are implemented in the `RegulatorTools` folder (`LexQueryTools` class) and call [PayrollEngine.Lex](https://github.com/Payroll-Engine/PayrollEngine.Lex) directly (no `pecmd` subprocess).
+
+The package references PayrollEngine.Lex with all assets, so the language files of the library (`LexVocabulary`) are copied to the output of the host project without an own reference. Hosts must list Lex dependencies in their own [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md); this repository's notice covers MCP Tools dependencies only.
 
 Every tool returns structured JSON. Limits per call:
 
@@ -147,7 +149,8 @@ When building a server that combines these tools with additional write tools fro
 
 | Repository | Description |
 |:-----------|:------------|
-| [PayrollEngine.Mcp.Core](https://github.com/Payroll-Engine/PayrollEngine.Mcp.Core) | Core infrastructure — `ToolBase`, isolation model, permission system |
+| [PayrollEngine.Mcp.Core](https://github.com/Payroll-Engine/PayrollEngine.Mcp.Core) | Core infrastructure — `IsolationToolBase`, `ToolBase`, workspace isolation |
+| [PayrollEngine.Lex](https://github.com/Payroll-Engine/PayrollEngine.Lex) | Provenance library used by the Regulator tools |
 | [PayrollEngine.Mcp.Server](https://github.com/Payroll-Engine/PayrollEngine.Mcp.Server) | Hosted MCP server using Core and Tools |
 | [PayrollEngine.Client.Core](https://github.com/Payroll-Engine/PayrollEngine.Client.Core) | Payroll Engine REST API client |
 
