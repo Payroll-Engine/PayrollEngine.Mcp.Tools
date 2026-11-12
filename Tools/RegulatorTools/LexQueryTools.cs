@@ -169,6 +169,8 @@ public sealed class LexQueryTools(IsolationContext isolation) : IsolationToolBas
                 RegulatorLimits.Apply(maxManifests, limit), requireNarrowScope: checkUrls);
 
             using var urlChecker = checkUrls ? new UrlChecker() : null;
+            // additional languages of the source verification (release): the host variable, as lex_release_gate
+            var vocabulary = VerifySourceOperation.ResolveVocabulary(null, Environment.GetEnvironmentVariable);
             var results = new List<JsonNode>();
             var checkResults = new List<CheckResult>();
             for (var index = 0; index < scope.Manifests.Count; index++)
@@ -177,7 +179,7 @@ public sealed class LexQueryTools(IsolationContext isolation) : IsolationToolBas
                 var manifest = scope.Manifests[index];
                 Report(progress, index, scope.Manifests.Count,
                     $"{(checkUrls ? "Checking URLs of" : "Checking")} {manifest.Relative}");
-                var result = await CheckFileAsync(manifest, requireLocation, requireVerification, release, urlChecker);
+                var result = await CheckFileAsync(manifest, requireLocation, requireVerification, release, urlChecker, vocabulary);
                 checkResults.Add(result);
                 var node = RegulatorJson.ToNode(result);
                 node["lexPath"] = manifest.Relative;
@@ -208,7 +210,7 @@ public sealed class LexQueryTools(IsolationContext isolation) : IsolationToolBas
     }
 
     private static async Task<CheckResult> CheckFileAsync(LexManifestRef reference, bool requireLocation,
-        bool requireVerification, bool release, UrlChecker urlChecker)
+        bool requireVerification, bool release, UrlChecker urlChecker, string vocabulary)
     {
         Manifest manifest;
         try
@@ -229,7 +231,7 @@ public sealed class LexQueryTools(IsolationContext isolation) : IsolationToolBas
         var result = Checker.Check(manifest, reference.LexPath, requireLocation, requireVerification, release);
         if (release)
         {
-            await Checker.CheckSources(manifest, result);
+            await Checker.CheckSources(manifest, result, vocabulary);
         }
         if (urlChecker != null)
         {
