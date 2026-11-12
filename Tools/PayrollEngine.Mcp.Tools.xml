@@ -345,13 +345,18 @@
             <summary>Execute a payroll report and return the result data set</summary>
         </member>
         <member name="T:PayrollEngine.Mcp.Tools.ServerInfoTools">
-            <summary>MCP tool for server metadata — always registered regardless of role or isolation level.</summary>
+            <summary>MCP tool for server metadata — always registered regardless of role or isolation level.
+            Needs no backend: the backend client is optional and only reported as connected or offline.</summary>
         </member>
-        <member name="M:PayrollEngine.Mcp.Tools.ServerInfoTools.#ctor(PayrollEngine.Client.PayrollHttpClient,PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
-            <summary>MCP tool for server metadata — always registered regardless of role or isolation level.</summary>
+        <member name="M:PayrollEngine.Mcp.Tools.ServerInfoTools.#ctor(PayrollEngine.Mcp.Core.Isolation.IsolationContext,PayrollEngine.Client.PayrollHttpClient)">
+            <summary>MCP tool for server metadata — always registered regardless of role or isolation level.
+            Needs no backend: the backend client is optional and only reported as connected or offline.</summary>
         </member>
         <member name="M:PayrollEngine.Mcp.Tools.ServerInfoTools.GetServerInfoAsync">
-            <summary>Get MCP server version, isolation level and active permissions</summary>
+            <summary>Get MCP server version, Lex version, isolation level, regulator mode, backend mode and active permissions</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.ServerInfoTools.GetLexVersion">
+            <summary>The version of the Lex library the regulator tools run on</summary>
         </member>
         <member name="T:PayrollEngine.Mcp.Tools.TenantTools.TenantQueryTools">
             <summary>MCP tools for tenant queries</summary>
