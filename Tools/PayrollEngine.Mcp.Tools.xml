@@ -175,6 +175,166 @@
         <member name="M:PayrollEngine.Mcp.Tools.PeopleTools.UserQueryTools.GetUserAttributeAsync(System.String,System.String,System.String)">
             <summary>Get a single attribute value of a user</summary>
         </member>
+        <member name="T:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools">
+            <summary>Read-only MCP tools for the provenance manifests (lex.json) of data regulations.
+            The tools read files below the configured workspace roots and never write.
+            Registered only when the permission of the Regulator role is not None.</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.#ctor(PayrollEngine.Mcp.Core.Isolation.IsolationContext)">
+            <summary>Read-only MCP tools for the provenance manifests (lex.json) of data regulations.
+            The tools read files below the configured workspace roots and never write.
+            Registered only when the permission of the Regulator role is not None.</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.ListManifestsAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>List the manifests of the workspace with their summary</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.GetEntryAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>Get one entry of a manifest</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.CheckAsync(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Nullable{System.Int32},System.IProgress{ModelContextProtocol.ProgressNotificationValue},System.Threading.CancellationToken)">
+            <summary>Check manifests against their data regulation</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.VerifySnapshotAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>Verify the snapshots of manifests</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.VerifySourceAsync(System.String,System.String,System.String,System.String,System.Boolean,System.Nullable{System.Int32},System.IProgress{ModelContextProtocol.ProgressNotificationValue},System.Threading.CancellationToken)">
+            <summary>Verify the entries against their sources without writing</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.ValidateAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>Validate the structure of manifests</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.RequireRead">
+            <summary>The Regulator role is registered at Read at least; direct callers get the same rule</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.RegulatorTools.LexManifestRef">
+            <summary>A manifest file inside the workspace</summary>
+            <param name="LexPath">Full path of lex.json</param>
+            <param name="Relative">Path relative to its workspace root, with <c>/</c> separators</param>
+            <param name="Repository">Repository folder name</param>
+            <param name="Satellite">Name of the folder that holds the .lex folder</param>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexManifestRef.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>A manifest file inside the workspace</summary>
+            <param name="LexPath">Full path of lex.json</param>
+            <param name="Relative">Path relative to its workspace root, with <c>/</c> separators</param>
+            <param name="Repository">Repository folder name</param>
+            <param name="Satellite">Name of the folder that holds the .lex folder</param>
+        </member>
+        <member name="P:PayrollEngine.Mcp.Tools.RegulatorTools.LexManifestRef.LexPath">
+            <summary>Full path of lex.json</summary>
+        </member>
+        <member name="P:PayrollEngine.Mcp.Tools.RegulatorTools.LexManifestRef.Relative">
+            <summary>Path relative to its workspace root, with <c>/</c> separators</summary>
+        </member>
+        <member name="P:PayrollEngine.Mcp.Tools.RegulatorTools.LexManifestRef.Repository">
+            <summary>Repository folder name</summary>
+        </member>
+        <member name="P:PayrollEngine.Mcp.Tools.RegulatorTools.LexManifestRef.Satellite">
+            <summary>Name of the folder that holds the .lex folder</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.RegulatorTools.LexScope">
+            <summary>The manifests selected by the scope of a call</summary>
+            <param name="Manifests">The manifests to process, at most the limit of the call</param>
+            <param name="Matched">Number of manifests in the scope</param>
+            <param name="Limit">Maximum manifests of the call</param>
+            <param name="Skipped">Manifest files left out because they leave the workspace (links)</param>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexScope.#ctor(System.Collections.Generic.IReadOnlyList{PayrollEngine.Mcp.Tools.RegulatorTools.LexManifestRef},System.Int32,System.Int32,System.Int32)">
+            <summary>The manifests selected by the scope of a call</summary>
+            <param name="Manifests">The manifests to process, at most the limit of the call</param>
+            <param name="Matched">Number of manifests in the scope</param>
+            <param name="Limit">Maximum manifests of the call</param>
+            <param name="Skipped">Manifest files left out because they leave the workspace (links)</param>
+        </member>
+        <member name="P:PayrollEngine.Mcp.Tools.RegulatorTools.LexScope.Manifests">
+            <summary>The manifests to process, at most the limit of the call</summary>
+        </member>
+        <member name="P:PayrollEngine.Mcp.Tools.RegulatorTools.LexScope.Matched">
+            <summary>Number of manifests in the scope</summary>
+        </member>
+        <member name="P:PayrollEngine.Mcp.Tools.RegulatorTools.LexScope.Limit">
+            <summary>Maximum manifests of the call</summary>
+        </member>
+        <member name="P:PayrollEngine.Mcp.Tools.RegulatorTools.LexScope.Skipped">
+            <summary>Manifest files left out because they leave the workspace (links)</summary>
+        </member>
+        <member name="P:PayrollEngine.Mcp.Tools.RegulatorTools.LexScope.Truncated">
+            <summary>True when the scope holds more manifests than the call processes</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.RegulatorTools.LexScopeResolver">
+            <summary>Resolves the scope of a call (root, repository, satellite) to manifest files below the workspace roots.
+            Every manifest path is resolved through the workspace, so the roots, the repository mask and the link rules apply.</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.LexScopeResolver.ManifestFileName">
+            <summary>File name of a manifest</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexScopeResolver.Resolve(PayrollEngine.Mcp.Core.Isolation.WorkspaceContext,System.String,System.String,System.String,System.Int32,System.Boolean)">
+            <summary>Resolves the manifests of a scope</summary>
+            <param name="workspace">The workspace of the deployment</param>
+            <param name="root">A configured workspace root, null for all roots</param>
+            <param name="repository">Repository folder name below the root, null for all repositories matching the mask</param>
+            <param name="satellite">Satellite folder name, null for all satellites</param>
+            <param name="limit">Maximum manifests of the call</param>
+            <param name="requireNarrowScope">The call needs a repository or a satellite (operations with network access)</param>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexScopeResolver.ResolveManifest(PayrollEngine.Mcp.Core.Isolation.WorkspaceContext,System.String)">
+            <summary>Resolves a single manifest from a path argument: a lex.json file, a .lex folder,
+            or a satellite folder holding .lex/lex.json</summary>
+            <param name="workspace">The workspace of the deployment</param>
+            <param name="path">Path argument of the caller</param>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorJson">
+            <summary>JSON helpers of the Regulator read tools</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorJson.OutputOptions">
+            <summary>Output options: camelCase names, enums as text, no null values</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorJson.InputOptions">
+            <summary>Tolerant reading of lex.json and snapshot.json (comments, trailing commas)</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorJson.Serialize(System.Object)">
+            <summary>Serializes a value to JSON text</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorJson.ToNode(System.Object)">
+            <summary>Serializes a value to a JSON node</summary>
+        </member>
+        <member name="T:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits">
+            <summary>Limits per call of the Regulator read tools.
+            A call processes at most the given number of manifests; the response reports a truncated scope.</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.ListManifests">
+            <summary>Maximum manifests per call: list of manifests</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.FileChecks">
+            <summary>Maximum manifests per call: snapshot verification and manifest validation</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.Check">
+            <summary>Maximum manifests per call: check in development mode</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.CheckRelease">
+            <summary>Maximum manifests per call: check in release mode (verifies the local evidence files)</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.CheckUrls">
+            <summary>Maximum manifests per call: check with URL requests</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.VerifySourceLocal">
+            <summary>Maximum manifests per call: source verification against the local evidence</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.VerifySourceLive">
+            <summary>Maximum manifests per call: source verification against the live sources</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.MaxEntriesPerManifest">
+            <summary>Maximum number of entries returned per manifest by the source verification</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.MaxDifferences">
+            <summary>Maximum number of snapshot differences returned per manifest</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.Apply(System.Nullable{System.Int32},System.Int32)">
+            <summary>Applies the requested manifest count to the hard limit of the operation.
+            A missing or non-positive request selects the limit.</summary>
+            <param name="requested">Count requested by the caller</param>
+            <param name="limit">Hard limit of the operation</param>
+        </member>
         <member name="T:PayrollEngine.Mcp.Tools.ReportTools.ReportQueryTools">
             <summary>MCP tools for payroll report execution</summary>
         </member>

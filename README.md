@@ -3,7 +3,7 @@
 > Part of the [Payroll Engine](https://github.com/Payroll-Engine/PayrollEngine) open-source payroll automation framework.
 > Full documentation at [payrollengine.org](https://payrollengine.org).
 
-Read-only MCP tools for the Payroll Engine — HR, Payroll, Report and System query tools built on [PayrollEngine.Mcp.Core](https://github.com/Payroll-Engine/PayrollEngine.Mcp.Core), ready for use in any MCP server deployment.
+Read-only MCP tools for the Payroll Engine — HR, Payroll, Report, System and Regulator query tools built on [PayrollEngine.Mcp.Core](https://github.com/Payroll-Engine/PayrollEngine.Mcp.Core), ready for use in any MCP server deployment.
 
 ---
 
@@ -21,7 +21,7 @@ dotnet add package PayrollEngine.Mcp.Tools
 
 `PayrollEngine.Mcp.Tools` provides the complete set of read-only MCP tools that expose Payroll Engine data to AI agents. All tools are **read-only by design** — no mutations, no side effects, with two exceptions: `get_employee_pay_preview` and `execute_payroll_report` execute synchronous calculations without persisting anything to the database.
 
-Tools are organized into four roles. Each role is independently enabled or disabled per server deployment via `McpPermissions`.
+Tools are organized into five roles. Each role is independently enabled or disabled per server deployment via `McpPermissions`.
 
 ---
 
@@ -93,6 +93,27 @@ Payroll structure, regulation analysis, results, preview calculations, temporal 
 | `get_user` | Get a user by identifier |
 | `get_user_attribute` | Get a single custom attribute of a user |
 
+### Regulator — Provenance Manifests
+
+File based tools over the `lex.json` manifests of data regulations, built on [PayrollEngine.Lex](https://github.com/Payroll-Engine/PayrollEngine.Lex). They need no backend connection, read files below the configured workspace roots (`McpServer:Regulator:Roots`) and never write. They are registered only when `McpServer:Permissions:Regulator` is `Read` or higher; the default is `None`, so an existing deployment does not gain file access.
+
+| Tool | Description |
+|:-----|:------------|
+| `lex_list_manifests` | Manifests with summary: entries, open entries, verification counts, snapshot state, content hash |
+| `lex_get_entry` | One entry with sources, location, quote, verification record, exclusions and snapshot state |
+| `lex_check` | Check against the data regulation; mode `development` or `release`, optional URL check |
+| `lex_verify_snapshot` | Snapshot against manifest and evidence files |
+| `lex_verify_source` | Rate every entry against its sources, `local` evidence or `live`; nothing is written |
+| `lex_validate` | Structural validation of manifests |
+
+The package references PayrollEngine.Lex with all assets, so the language files of the library (`LexVocabulary`) are copied to the output of the host project without an own reference. Third-party components of Lex are listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+
+Every tool returns structured JSON. Limits per call:
+
+- **Scope:** `root`, `repository` and `satellite` narrow the manifests of a call. Operations with network access (`lex_check` with `checkUrls`, `lex_verify_source` with source `live`) require a `repository` or `satellite`.
+- **Maximum manifests:** `maxManifests` lowers the hard limit of the operation (list 200, snapshot and validation 100, check 50, release check 25, URL check 10, source verification 25, live source verification 5). The response reports `matched`, `processed`, `limit` and `truncated`.
+- **Progress:** `lex_check` and `lex_verify_source` send progress notifications per manifest when the client requests them.
+
 ---
 
 ## Role × Isolation Level
@@ -105,6 +126,7 @@ Payroll structure, regulation analysis, results, preview calculations, temporal 
 | Payroll | ✓ | ✓ | ✓ | ✗ |
 | Report | ✓ | ✓ | ✗ | ✗ |
 | System | ✓ | ✓ | ✗ | ✗ |
+| Regulator | ✓ | ✓ | ✗ | ✗ |
 
 ---
 

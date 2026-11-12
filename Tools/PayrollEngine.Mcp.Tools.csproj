@@ -18,6 +18,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="PayrollEngine.Mcp.Core" Version="$(Version)" />
+		<PackageReference Include="PayrollEngine.Lex" Version="$(Version)" PrivateAssets="none" />
 	</ItemGroup>
 
 	<!-- include xml documention files and json schemas to the nuget package -->
@@ -32,6 +33,10 @@
 
 	<ItemGroup>
 	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\THIRD-PARTY-NOTICES.md">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
