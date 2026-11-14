@@ -36,12 +36,21 @@ public sealed class LexQueryTools(IsolationContext isolation) : IsolationToolBas
         "entries, open entries, verification counts (auto, manual, without), sources, files, exclusions, " +
         "snapshot state (missing, current, stale, unreadable) and the content hash. " +
         "Narrow the scope with root, repository and satellite. " +
-        "The response reports matched, processed and limit; a truncated scope needs a narrower scope.")]
+        "The response carries a summary over all processed manifests (counts of entries, open entries, verification " +
+        "states and snapshot states). A large scope gives a large response: onlyProblems lists only the manifests that " +
+        "have an error, open entries, entries without verification or a snapshot that is not current; summaryOnly " +
+        "lists compact rows (manifest, entries, open entries, entries without verification, snapshot state, content hash); " +
+        "countsOnly lists no rows. The summary always covers all processed manifests. " +
+        "The response reports matched, processed and limit; a truncated scope needs a narrower scope. " +
+        "A response above 32000 characters carries a sizeWarning that names these filters.")]
     public async Task<string> ListManifestsAsync(
         [Description("A configured workspace root; default all roots")] string root = null,
         [Description("Repository folder name below the root; default all repositories matching the repository mask")] string repository = null,
         [Description("Satellite folder name (the folder that holds .lex); default all satellites")] string satellite = null,
         [Description("Maximum manifests of the call; default and maximum 200")] int? maxManifests = null,
+        [Description("List only the manifests with a problem: error, open entries, entries without verification or a snapshot that is not current (default false)")] bool onlyProblems = false,
+        [Description("List compact rows instead of the full summary per manifest (default false)")] bool summaryOnly = false,
+        [Description("List no rows, only the summary over all processed manifests (default false)")] bool countsOnly = false,
         CancellationToken cancellationToken = default)
     {
         try
@@ -52,9 +61,66 @@ public sealed class LexQueryTools(IsolationContext isolation) : IsolationToolBas
             var source = new WorkspaceLexSource(scope.Manifests.Select(x => x.LexPath));
             var infos = await source.ListManifestsAsync(cancellationToken);
 
-            var manifests = scope.Manifests.Select((manifest, index) =>
+            var summary = new
             {
-                var info = infos[index];
+                manifests = infos.Count,
+                withError = infos.Count(x => x.Error != null),
+                withProblems = infos.Count(IsProblem),
+                entries = infos.Sum(x => x.Entries),
+                openEntries = infos.Sum(x => x.OpenEntries),
+                autoVerified = infos.Sum(x => x.AutoVerified),
+                manualVerified = infos.Sum(x => x.ManualVerified),
+                withoutVerification = infos.Sum(x => x.WithoutVerification),
+                snapshotStates = new
+                {
+                    current = infos.Count(x => x.SnapshotState == LexSnapshotState.Current),
+                    stale = infos.Count(x => x.SnapshotState == LexSnapshotState.Stale),
+                    missing = infos.Count(x => x.SnapshotState == LexSnapshotState.Missing),
+                    unreadable = infos.Count(x => x.SnapshotState == LexSnapshotState.Unreadable)
+                }
+            };
+            const string filterHint =
+                "repository or satellite narrow the scope, onlyProblems lists only the manifests with a problem, " +
+                "summaryOnly lists compact rows, countsOnly lists no rows";
+            if (countsOnly)
+            {
+                return SignWithIntegrity(RegulatorJson.SerializeWithSizeHint(new
+                {
+                    scope = DescribeScope(scope),
+                    summary,
+                    listed = 0
+                }, filterHint));
+            }
+
+            var selected = scope.Manifests
+                .Select((manifest, index) => (Manifest: manifest, Info: infos[index]))
+                .Where(x => !onlyProblems || IsProblem(x.Info))
+                .ToList();
+            if (summaryOnly)
+            {
+                return SignWithIntegrity(RegulatorJson.SerializeWithSizeHint(new
+                {
+                    scope = DescribeScope(scope),
+                    summary,
+                    listed = selected.Count,
+                    manifests = selected.Select(x => new
+                    {
+                        manifest = x.Manifest.Relative,
+                        x.Manifest.Satellite,
+                        x.Info.Error,
+                        x.Info.Entries,
+                        x.Info.OpenEntries,
+                        x.Info.WithoutVerification,
+                        snapshotState = x.Info.SnapshotState,
+                        contentHash = x.Info.ContentHash
+                    }).ToList()
+                }, filterHint));
+            }
+
+            var manifests = selected.Select(item =>
+            {
+                var manifest = item.Manifest;
+                var info = item.Info;
                 return new
                 {
                     manifest = manifest.Relative,
@@ -80,11 +146,13 @@ public sealed class LexQueryTools(IsolationContext isolation) : IsolationToolBas
                 };
             }).ToList();
 
-            return SignWithIntegrity(RegulatorJson.Serialize(new
+            return SignWithIntegrity(RegulatorJson.SerializeWithSizeHint(new
             {
                 scope = DescribeScope(scope),
+                summary,
+                listed = manifests.Count,
                 manifests
-            }));
+            }, filterHint));
         }
         catch (OperationCanceledException) { throw; }
         catch (Exception exception) { return Error(exception); }
@@ -476,6 +544,11 @@ public sealed class LexQueryTools(IsolationContext isolation) : IsolationToolBas
             throw new UnauthorizedAccessException("The Regulator role is not permitted (McpServer:Permissions:Regulator).");
         }
     }
+
+    /// <summary>A manifest with an error, open entries, entries without verification or a snapshot that is not current</summary>
+    private static bool IsProblem(LexManifestInfo info) =>
+        info.Error != null || info.OpenEntries > 0 || info.WithoutVerification > 0 ||
+        info.SnapshotState != LexSnapshotState.Current;
 
     private static object DescribeScope(LexScope scope) => new
     {

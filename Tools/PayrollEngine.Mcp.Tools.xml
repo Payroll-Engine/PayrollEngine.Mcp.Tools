@@ -185,7 +185,7 @@
             The tools read files below the configured workspace roots and never write.
             Registered only when the permission of the Regulator role is not None.</summary>
         </member>
-        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.ListManifestsAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.ListManifestsAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Boolean,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <summary>List the manifests of the workspace with their summary</summary>
         </member>
         <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.GetEntryAsync(System.String,System.String,System.Threading.CancellationToken)">
@@ -205,6 +205,9 @@
         </member>
         <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.RequireRead">
             <summary>The Regulator role is registered at Read at least; direct callers get the same rule</summary>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.LexQueryTools.IsProblem(PayrollEngine.Lex.LexManifestInfo)">
+            <summary>A manifest with an error, open entries, entries without verification or a snapshot that is not current</summary>
         </member>
         <member name="T:PayrollEngine.Mcp.Tools.RegulatorTools.LexManifestRef">
             <summary>A manifest file inside the workspace</summary>
@@ -295,6 +298,15 @@
         <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorJson.Serialize(System.Object)">
             <summary>Serializes a value to JSON text</summary>
         </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorJson.SerializeWithSizeHint(System.Object,System.String)">
+            <summary>Serializes a response object; a text longer than <see cref="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.ResponseSizeHint"/>
+            characters gets a <c>sizeWarning</c> property that names the filters of the tool</summary>
+            <param name="value">The response object</param>
+            <param name="filterHint">The ways to narrow the output of the tool, e.g. the names of its filter parameters</param>
+        </member>
+        <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorJson.SizeWarning(System.Int32,System.String)">
+            <summary>The text of the size hint</summary>
+        </member>
         <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorJson.ToNode(System.Object)">
             <summary>Serializes a value to a JSON node</summary>
         </member>
@@ -328,6 +340,12 @@
         </member>
         <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.MaxDifferences">
             <summary>Maximum number of snapshot differences returned per manifest</summary>
+        </member>
+        <member name="F:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.ResponseSizeHint">
+            <summary>Size of a response in characters above which a tool adds a hint to narrow the output.
+            The server sets no size limit of its own; MCP clients limit the size of a tool result themselves
+            (a client moved results of 44 KB and 93 KB out of the conversation), so the default output of the list
+            tools stays below this size for a typical repository and names the filters when it does not.</summary>
         </member>
         <member name="M:PayrollEngine.Mcp.Tools.RegulatorTools.RegulatorLimits.Apply(System.Nullable{System.Int32},System.Int32)">
             <summary>Applies the requested manifest count to the hard limit of the operation.

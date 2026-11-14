@@ -114,6 +114,7 @@ Every tool returns structured JSON. Limits per call:
 
 - **Scope:** `root`, `repository` and `satellite` narrow the manifests of a call. Operations with network access (`lex_check` with `checkUrls`, `lex_verify_source` with source `live`) require a `repository` or `satellite`.
 - **Maximum manifests:** `maxManifests` lowers the hard limit of the operation (list 200, snapshot and validation 100, check 50, release check 25, URL check 10, source verification 25, live source verification 5). The response reports `matched`, `processed`, `limit` and `truncated`.
+- **Response size:** the server sets no size limit of its own, but MCP clients limit the size of a tool result themselves. `lex_list_manifests` therefore carries a `summary` over all processed manifests and takes three filters: `onlyProblems` lists only the manifests with an error, open entries, entries without verification or a snapshot that is not current; `summaryOnly` lists compact rows; `countsOnly` lists no rows. The default output is unchanged except for the added `summary` and `listed`. A response above 32000 characters carries a `sizeWarning` that names the filters.
 - **Progress:** `lex_check` and `lex_verify_source` send progress notifications per manifest when the client requests them.
 
 ---

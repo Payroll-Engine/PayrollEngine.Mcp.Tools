@@ -26,6 +26,26 @@ internal static class RegulatorJson
     internal static string Serialize(object value) =>
         JsonSerializer.Serialize(value, OutputOptions);
 
+    /// <summary>Serializes a response object; a text longer than <see cref="RegulatorLimits.ResponseSizeHint"/>
+    /// characters gets a <c>sizeWarning</c> property that names the filters of the tool</summary>
+    /// <param name="value">The response object</param>
+    /// <param name="filterHint">The ways to narrow the output of the tool, e.g. the names of its filter parameters</param>
+    internal static string SerializeWithSizeHint(object value, string filterHint)
+    {
+        var text = Serialize(value);
+        if (text.Length <= RegulatorLimits.ResponseSizeHint || ToNode(value) is not JsonObject node)
+        {
+            return text;
+        }
+        node["sizeWarning"] = SizeWarning(text.Length, filterHint);
+        return node.ToJsonString(OutputOptions);
+    }
+
+    /// <summary>The text of the size hint</summary>
+    internal static string SizeWarning(int length, string filterHint) =>
+        $"The response has {length} characters; an MCP client may move a result of this size out of the " +
+        $"conversation (hint above {RegulatorLimits.ResponseSizeHint}). Narrow the output: {filterHint}.";
+
     /// <summary>Serializes a value to a JSON node</summary>
     internal static JsonNode ToNode(object value) =>
         JsonSerializer.SerializeToNode(value, OutputOptions);
