@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ public sealed class ServerInfoTools(IsolationContext isolation, PayrollHttpClien
     /// <summary>Get MCP server version, Lex version, isolation level, regulator mode, backend mode and active permissions</summary>
     [McpServerTool(Name = "get_server_info"), Description(
         "Get Payroll Engine MCP Server metadata: version, Lex library version, isolation level, configured scope, " +
-        "active role permissions, regulator mode (permission, workspace roots, backend access) and backend mode (connected or offline). " +
+        "active role permissions (including roles defined by the server), regulator mode (permission, workspace roots, backend access) and backend mode (connected or offline). " +
         "Use this to verify which server build is running and how it is configured.")]
     public Task<string> GetServerInfoAsync()
     {
@@ -56,6 +57,7 @@ public sealed class ServerInfoTools(IsolationContext isolation, PayrollHttpClien
                 System    = Isolation.Permissions.System.ToString(),
                 Regulator = Isolation.Permissions.Regulator.ToString()
             },
+            customRoles = Isolation.Permissions.CustomRoles.ToDictionary(role => role.Key, role => role.Value.ToString()),
             regulator = new
             {
                 mode = Isolation.Permissions.Regulator.ToString(),
